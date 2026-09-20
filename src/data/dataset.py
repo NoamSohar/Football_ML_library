@@ -1,6 +1,4 @@
 from pathlib import Path
-import pandas as pd
-
 from data.processing import process_matches, save_processed_data
 from features.Goals import GoalCalculator
 from features.elo import EloCalculator
@@ -29,7 +27,6 @@ def build_dataset():
 
     df = df.drop(columns=["fixture_id", "round", "home_goals", "away_goals", "home_team", "away_team", "status"])
     print("Matches count before cleaning:", len(df))
-    print(df.isna().sum())
 
     df = df.dropna()
     print("Matches count after cleaning:", len(df))
