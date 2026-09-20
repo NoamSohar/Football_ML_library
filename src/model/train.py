@@ -3,7 +3,7 @@ from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 
 class ModelTrainer:
-    def __init__(self, dataset_path: str):
+    def __init__(self, dataset_path):
         self.dataset_path = dataset_path
 
         self.df = None
@@ -22,20 +22,16 @@ class ModelTrainer:
         self.df = self.df.sort_values("date").reset_index(drop=True)
 
 
-    def split_data(self, validation_days: int=30):
-        x = self.df.drop("result")
-        y = self.df["result"]
+    def split_data(self, val_ratio: float = 0.2):
+        split_index = int(len(self.df) * (1 - val_ratio))
 
-        last_date = self.df["date"].max()
-        split_date = last_date - pd.Timedelta(validation_days)
+        train_df = self.df.iloc[:split_index]
+        val_df = self.df.iloc[split_index:]
 
-        train_df = self.df[self.df["date"] < split_date]
-        val_df = self.df[self.df["date"] >= split_date]
-
-        self.x_train = train_df[self.feature_columns]
+        self.x_train = train_df.drop(columns=["date", "result"])
         self.y_train = train_df["result"]
 
-        self.x_val = val_df[self.feature_columns]
+        self.x_val = val_df.drop(columns=["date", "result"])
         self.y_val = val_df["result"]
 
     def train(self, model_params: dict):
