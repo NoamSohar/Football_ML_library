@@ -56,22 +56,18 @@ class EloCalculator:
         home_elos = []
         away_elos = []
 
-        for _, match in df.iterrows():
-            home_team_id = match["home_team_id"]
-            away_team_id = match["away_team_id"]
+        for _, fixtures_at_kickoff in df.groupby("date", sort=True):
+            for _, match in fixtures_at_kickoff.iterrows():
+                home_elos.append(self.get_elo(match["home_team_id"]))
+                away_elos.append(self.get_elo(match["away_team_id"]))
 
-            home_elo = self.get_elo(home_team_id)
-            away_elo = self.get_elo(away_team_id)
-
-            home_elos.append(home_elo)
-            away_elos.append(away_elo)
-
-            self.update_ratings(
-                home_team_id,
-                away_team_id,
-                match["home_goals"],
-                match["away_goals"]
-            )
+            for _, match in fixtures_at_kickoff.iterrows():
+                self.update_ratings(
+                    match["home_team_id"],
+                    match["away_team_id"],
+                    match["home_goals"],
+                    match["away_goals"],
+                )
 
         df["home_elo"] = home_elos
         df["away_elo"] = away_elos

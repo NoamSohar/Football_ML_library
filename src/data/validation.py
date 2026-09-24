@@ -40,9 +40,15 @@ def validate_scores(df):
     finished = df[df["status"] == "FT"]
 
     if finished["home_goals"].isna().any():
-        raise ValueError("Home goals cannot be negative")
+        raise ValueError("Home goals cannot be missing")
 
     if finished["away_goals"].isna().any():
+        raise ValueError("Away goals cannot be missing")
+
+    if (finished["home_goals"] < 0).any():
+        raise ValueError("Home goals cannot be negative")
+
+    if (finished["away_goals"] < 0).any():
         raise ValueError("Away goals cannot be negative")
 
 def validate_matches(df):

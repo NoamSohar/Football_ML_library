@@ -1,12 +1,13 @@
 from pathlib import Path
-from data.processing import process_matches, save_processed_data
-from features.Goals import GoalCalculator
-from features.elo import EloCalculator
-from features.form import FormCalculator
+from src.data.processing import process_matches, save_processed_data
+from src.features.Goals import GoalCalculator
+from src.features.elo import EloCalculator
+from src.features.form import FormCalculator
 
 def build_dataset():
     project_root = Path(__file__).resolve().parents[2]
     dataset_data_dir = project_root / "data" / "dataset"
+    dataset_data_dir.mkdir(parents=True, exist_ok=True)
 
     processed_matches = process_matches()
     save_processed_data(processed_matches)
