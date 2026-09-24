@@ -11,3 +11,5 @@ __pycache__/
 # Generated data
 data/processed/
 data/raw/
+data/dataset/
+data/models/
