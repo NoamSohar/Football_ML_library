@@ -1,26 +1,36 @@
-# Football Outcome Predictor
+# Football Machine Learning Library⚽
 
-An experimental machine-learning project that predicts FootBall match outcomes: draw, home win, or away win.
+An experimental machine-learning project that provides tools for building, training, and evaluating football match prediction models.
 
-## What it does
+Note: The library is still evolving, so some parts aren't fully documented yet.
 
-1. Validates and cleans historical finished fixtures.
-2. Builds pre-kickoff Elo, five-match form, season form, and goals-per-game features.
-3. Tunes an XGBoost classifier and draw-class weight with chronological nested validation.
-4. Calibrates the draw decision threshold on a separate chronological period.
-5. Reports performance once on an untouched final test period.
+## What it does?
+The library provides tools to:
 
-This is an educational portfolio project. It is not betting advice or a production prediction service.
+- Load, validate and clean historical match data.
+- Generate features such as Elo ratings, recent form, season form, and goals per-game.
+- Build and train XGBoost models for match outcome prediction. (see why XGBoost is used below⬇️)
+- Tune model parameters and class weights using chronological data splits.
+- Find a custom draw prediction threshold.
+- Evaluate models using accuracy, F1, log loss, confusion matrices and other metrics.
+- Save and load trained models for later use.
 
-## Data
 
-Place raw match CSV files in `data/raw/`. Each file must include:
+## Why XGBoost?
+XGBoost works well for football prediction (and generally all sport predictions) because the data is mostly structured, tabular features such as Elo ratings, form, and goals per game. It performs well even on relatively small datasets and can capture nonlinear relationships between these features. It also requires little preprocessing and provides class probabilities, which are useful when predicting home wins, draws, and away wins.
+
+
+## How to handle data:
+Place raw match CSV files in `data/raw/`. Each file should include:
 
 `fixture_id`, `date`, `round`, `home_team_id`, `home_team`, `away_team_id`, `away_team`, `home_goals`, `away_goals`, and `status`.
 
-Only fixtures with `status == "FT"` are used. Every feature uses matches strictly before the fixture kickoff. Simultaneous kickoffs receive Elo ratings before any fixture in that kickoff group updates ratings.
+I got my match data from API-Football, but you can use any data source as long as it follows the required format.
+
+Only fixtures with `status == "FT"` are used. Every feature uses matches strictly before the fixture match.
 
 ## Setup
+Clone the repository and create a virtual environment.
 
 ```powershell
 python -m venv .venv
